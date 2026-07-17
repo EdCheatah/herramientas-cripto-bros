@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRIPTO BROS - La Mata Memes</title>
+    <meta name="description"
+        content="Calculadora de estrategia CRIPTO BROS - La Mata Memes. Proyeccion de circuitos y rescate manual de posiciones." />
+    <meta name="author" content="CRIPTO BROS" />
+    <meta name="theme-color" content="#0b1120" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBiMTEyMCIvPjxyZWN0IHg9IjEuMjUiIHk9IjEuMjUiIHdpZHRoPSIyOS41IiBoZWlnaHQ9IjI5LjUiIHJ4PSI2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWM1NDIiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjU1Ii8+PGxpbmUgeDE9IjExIiB5MT0iNiIgeDI9IjExIiB5Mj0iMjYiIHN0cm9rZT0iIzRhZTE3NiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHJlY3QgeD0iOCIgeT0iMTEiIHdpZHRoPSI2IiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9IiM0YWUxNzYiLz48bGluZSB4MT0iMjEiIHkxPSI4IiB4Mj0iMjEiIHkyPSIyNCIgc3Ryb2tlPSIjZjVjNTQyIiBzdHJva2Utd2lkdGg9IjIiLz48cmVjdCB4PSIxOCIgeT0iMTMiIHdpZHRoPSI2IiBoZWlnaHQ9IjciIHJ4PSIxLjUiIGZpbGw9IiNmNWM1NDIiLz48L3N2Zz4K" />
+    <style>
+        :root {
+            --bg: #0b1120;
+            --card: #161e2e;
+            --card-hi: #1a2233;
+            --border: #1e293b;
+            --gold: #f5c542;
+            --gold-title: #e0b354;
+            --green: #4ae176;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --text: #ffffff;
+            --muted: #94a3b8;
+            --mono: "Cascadia Code", "Consolas", "SF Mono", "Roboto Mono", ui-monospace, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        /* La pagina no scrollea en escritorio: todo vive dentro del viewport */
+        .app {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 1024px) {
+
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .app {
+                height: 100vh;
+            }
+        }
+
+        /* ---------- Barra superior ---------- */
+        .topbar {
+            flex: 0 0 auto;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .topbar .ic {
+            color: var(--gold);
+            display: inline-flex;
+        }
+
+        .topbar .ic svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .brand {
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: var(--gold);
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .brand p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+        }
+
+        /* ---------- Selector de modo ---------- */
+        .mode-bar {
+            flex: 0 0 auto;
+            padding: 12px 16px 4px;
+        }
+
+        .segment {
+            display: flex;
+            max-width: 440px;
+            margin: 0 auto;
+            background: var(--card-hi);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px;
+        }
+
+        .segment button {
+            flex: 1;
+            border: none;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 999px;
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 700;
+            background: transparent;
+            color: var(--muted);
+            transition: all .15s ease;
+        }
+
+        .segment button.active {
+            background: var(--gold);
+            color: #3e2e00;
+        }
+
+        .segment button:not(.active):hover {
+            color: #fff;
+        }
+
+        /* ---------- Rejilla principal ---------- */
+        .main {
+            flex: 1 1 auto;
+            width: 100%;
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 8px 16px 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .main {
+                grid-template-columns: 4fr 8fr;
+                min-height: 0;
+            }
+        }
+
+        .col-left,
+        .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 1024px) {
+            .col-left {
+                min-height: 0;
+                overflow-y: auto;
+                padding-right: 4px;
+            }
+
+            .col-right {
+                min-height: 0;
+            }
+        }
+
+        /* ---------- Tarjetas ---------- */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .card.pad {
+            padding: 16px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-title);
+            font-weight: 700;
+            font-size: 15px;
+            margin: 0 0 12px;
+        }
+
+        .card-title .ico {
+            display: inline-flex;
+            color: var(--gold-title);
+        }
+
+        .route-head .ico {
+            display: inline-flex;
+            color: var(--gold);
+        }
+
+        .card-title .ico svg,
+        .route-head .ico svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .ico.green {
+            color: var(--green);
+        }
+
+        .ico.yellow {
+            color: var(--yellow);
+        }
+
+        .btn-calc svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ---------- Campos ---------- */
+        .field-label {
+            display: block;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .field-label.danger {
+            color: #fca5a5;
+        }
+
+        .field-label.warn {
+            color: var(--yellow);
+        }
+
+        .field {
+            width: 100%;
+            background: #0f172a;
+            border: 2px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            text-align: right;
+            outline: none;
+            transition: border-color .15s ease;
+            font-family: var(--mono);
+        }
+
+        .field:focus {
+            border-color: var(--gold);
+        }
+
+        .field.danger {
+            color: #fca5a5;
+        }
+
+        select.field {
+            text-align: left;
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+
+        select.field.warn {
+            border-color: var(--yellow);
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* ---------- Boton calcular ---------- */
+        .btn-calc {
+            width: 100%;
+            margin-top: 16px;
+            height: 48px;
+            border: none;
+            cursor: pointer;
+            background: #ffe5aa;
+            color: #3e2e00;
+            font-weight: 800;
+            font-size: 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: var(--mono);
+            transition: background .15s ease;
+        }
+
+        .btn-calc:hover {
+            background: var(--gold);
+        }
+
+        .btn-calc:active {
+            transform: scale(.98);
+        }
+
+        /* ---------- Tarjetas de metricas ---------- */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            flex: 0 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .metrics.four {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .metric {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric .m-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .metric .m-value {
+            font-family: var(--mono);
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 1.1;
+        }
+
+        .metric .m-value.small {
+            font-size: 15px;
+            word-break: break-all;
+        }
+
+        .metric .m-value.big {
+            font-size: 24px;
+        }
+
+        .m-red {
+            color: var(--red);
+        }
+
+        .m-gold {
+            color: var(--gold);
+        }
+
+        .m-green {
+            color: var(--green);
+        }
+
+        .m-yellow {
+            color: var(--yellow);
+        }
+
+        /* ---------- Hoja de ruta ---------- */
+        .route-card {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+            .route-card {
+                min-height: 0;
+            }
+        }
+
+        .route-head {
+            flex: 0 0 auto;
+            background: var(--card-hi);
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .route-head h3 {
+            margin: 0;
+            color: var(--gold-title);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .route-scroll {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        table.route {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            font-family: var(--mono);
+        }
+
+        table.route th,
+        table.route td {
+            padding: 10px 8px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        table.route th:first-child,
+        table.route td:first-child {
+            text-align: left;
+        }
+
+        table.route thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--card-hi);
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            font-family: system-ui, "Segoe UI", sans-serif;
+        }
+
+        table.route tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cell-danger {
+            color: #fca5a5;
+        }
+
+        .cell-be {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .placeholder {
+            text-align: center;
+            color: var(--muted);
+            padding: 32px 8px;
+            font-family: system-ui, "Segoe UI", sans-serif;
+        }
+
+        /* ---------- Filas de resultado manual ---------- */
+        .rows .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .rows .row:first-child {
+            border-top: none;
+        }
+
+        .rows .row .lbl {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .rows .row .val {
+            font-family: var(--mono);
+            font-weight: 700;
+        }
+
+        /* ---------- Utilidades ---------- */
+        .scroll-area {
+            scrollbar-width: thin;
+            scrollbar-color: #334155 transparent;
+        }
+
+        .scroll-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scroll-area::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 8px;
+        }
+
+        .scroll-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* ---------- Conmutador de herramientas ---------- */
+        .tool-switch {
+            flex: 0 0 auto;
+            padding: 12px 16px 4px;
+        }
+
+        .tool-switch .segment {
+            max-width: 520px;
+        }
+
+        .tool-switch .segment button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tool-switch .segment button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Contenedor de cada herramienta: ocupa el alto restante */
+        .tool {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------- DCA: gatillos ---------- */
+        .gatillos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(94px, 1fr));
+            gap: 8px;
+        }
+
+        .gatillo-box {
+            background: #0f172a;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            transition: border-color .15s ease;
+        }
+
+        .gatillo-box:focus-within {
+            border-color: var(--gold);
+        }
+
+        .gatillo-box label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .gatillo-box input {
+            width: 100%;
+            background: var(--card-hi);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 13px;
+            font-family: var(--mono);
+            outline: none;
+        }
+
+        .gatillo-box input:focus {
+            border-color: var(--gold);
+        }
+
+        .gatillo-box input+input {
+            margin-top: 4px;
+        }
+
+        .capital-display {
+            text-align: right;
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 700;
+            font-family: var(--mono);
+            margin-top: 8px;
+        }
+
+        /* ---------- DCA: chips de resultado por gatillo ---------- */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .margen-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.4;
+            flex: 1 1 auto;
+            min-width: 92px;
+        }
+
+        .margen-item span {
+            color: var(--gold);
+            font-weight: 700;
+            font-family: var(--mono);
+            font-size: 13px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ---------- DCA: totales y caja de riesgo ---------- */
+        .totales-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--gold-title);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .totales-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+
+        .totales-row .lbl {
+            color: var(--muted);
+        }
+
+        .totales-row .val {
+            font-family: var(--mono);
+            font-weight: 700;
+        }
+
+        .danger-box {
+            background: var(--card);
+            border: 1px solid var(--red);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .danger-box .m-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--muted);
+        }
+
+        .danger-box .m-value {
+            font-family: var(--mono);
+            font-weight: 800;
+            font-size: 26px;
+            color: var(--red);
+            line-height: 1.1;
+            display: block;
+            margin: 4px 0;
+        }
+
+        .danger-box .fees {
+            font-size: 11px;
+            color: #fca5a5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- Barra superior -->
+        <header class="topbar">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5v4" />
+                    <rect width="4" height="6" x="7" y="9" rx="1" />
+                    <path d="M9 15v2" />
+                    <path d="M17 3v2" />
+                    <rect width="4" height="8" x="15" y="5" rx="1" />
+                    <path d="M17 13v3" />
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+                </svg></span>
+            <div class="brand">
+                <h1>CRIPTO BROS</h1>
+                <p id="activeTool">La Mata Memes</p>
+            </div>
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg></span>
+        </header>
+
+        <!-- Conmutador de herramientas -->
+        <div class="tool-switch">
+            <div class="segment">
+                <button id="tool-mata-btn" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="22" x2="18" y1="12" y2="12" />
+                        <line x1="6" x2="2" y1="12" y2="12" />
+                        <line x1="12" x2="12" y1="6" y2="2" />
+                        <line x1="12" x2="12" y1="22" y2="18" />
+                    </svg>La Mata Memes</button>
+                <button id="tool-dca-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" />
+                        <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" />
+                        <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />
+                    </svg>DCA Master</button>
+            </div>
+        </div>
+
+        <!-- ================= HERRAMIENTA A: LA MATA MEMES ================= -->
+        <div id="tool-mata" class="tool">
+
+            <!-- Selector de modo -->
+            <div class="mode-bar">
+                <div class="segment">
+                    <button id="mode-auto" class="active">Automatico (Circuitos)</button>
+                    <button id="mode-manual">Rescate Manual</button>
+                </div>
+            </div>
+
+            <!-- Contenido principal -->
+            <main class="main">
+
+                <!-- Columna de entradas -->
+                <div class="col-left scroll-area">
+
+                    <!-- Entradas modo automatico -->
+                    <div id="inputs-auto" class="col-left" style="gap:12px;">
+
+                        <div class="card pad">
+                            <h3 class="card-title"><span class="ico"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M10 18v-7" />
+                                        <path
+                                            d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />
+                                        <path d="M14 18v-7" />
+                                        <path d="M18 18v-7" />
+                                        <path d="M3 22h18" />
+                                        <path d="M6 18v-7" />
+                                    </svg></span>Capital</h3>
+                            <label class="field-label danger">Perdida Maxima Deseada ($)</label>
+                            <input id="riesgoMax" class="field danger" type="number" step="any" value="200" />
+                        </div>
+
+                        <div class="card pad">
+                            <h3 class="card-title"><span class="ico green"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M16 7h6v6" />
+                                        <path d="m22 7-8.5 8.5-5-5L2 17" />
+                                    </svg></span>Parametros (Circuito)</h3>
+                            <div class="grid2">
+                                <div>
+                                    <label class="field-label">Precio Entrada ($)</label>
+                                    <input id="precioEntrada" class="field" type="number" step="any" value="64000" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Apalancamiento (x)</label>
+                                    <input id="apalancamiento" class="field" type="number" step="any" value="10" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Comision Base (%)</label>
+                                    <input id="comision" class="field" type="number" step="any" value="0.06" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Distancia Circuito (%)</label>
+                                    <input id="distancia" class="field" type="number" step="any" value="0.5" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Cantidad Circuitos</label>
+                                    <select id="circuitos" class="field">
+                                        <option value="1">1 Circuito</option>
+                                        <option value="2">2 Circuitos</option>
+                                        <option value="3" selected>3 Circuitos</option>
+                                        <option value="4">4 Circuitos</option>
+                                        <option value="5">5 Circuitos</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="field-label">Estrategia (Mult.)</label>
+                                    <select id="multiplicador" class="field">
+                                        <option value="1.5">Moderado (1.5x)</option>
+                                        <option value="2.0" selected>Martingala (2.0x)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="field-label">Mostrar Volumen En</label>
+                                    <select id="tipoVolumen" class="field">
+                                        <option value="monedas" selected>Monedas (Cantidad)</option>
+                                        <option value="nocional">Valor Nocional (USDT)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="field-label warn">Entrada BASE</label>
+                                    <select id="dividirBase" class="field warn">
+                                        <option value="1" selected>Un bloque</option>
+                                        <option value="2">Dividir en 2 (DCA)</option>
+                                        <option value="3">Dividir en 3 (DCA)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button id="calc-auto-btn" class="btn-calc"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="16" height="20" x="4" y="2" rx="2" />
+                                    <line x1="8" x2="16" y1="6" y2="6" />
+                                    <line x1="16" x2="16" y1="14" y2="18" />
+                                    <path d="M16 10h.01" />
+                                    <path d="M12 10h.01" />
+                                    <path d="M8 10h.01" />
+                                    <path d="M12 14h.01" />
+                                    <path d="M8 14h.01" />
+                                    <path d="M12 18h.01" />
+                                    <path d="M8 18h.01" />
+                                </svg>Proyectar Cobertura</button>
+                        </div>
+                    </div>
+
+                    <!-- Entradas modo manual -->
+                    <div id="inputs-manual" class="col-left hidden" style="gap:12px;">
+                        <div class="card pad">
+                            <h3 class="card-title"><span class="ico yellow"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                                        <path d="M12 9v4" />
+                                        <path d="M12 17h.01" />
+                                    </svg></span>Operacion Atrapada</h3>
+                            <label class="field-label danger">Monedas Atrapadas</label>
+                            <input id="m_volAtrapado" class="field danger" type="number" step="any" value="0.5" />
+                            <div class="grid2" style="margin-top:12px;">
+                                <div>
+                                    <label class="field-label">Entrada Original ($)</label>
+                                    <input id="m_precioEntrada" class="field" type="number" step="any" value="65000" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Precio Actual ($)</label>
+                                    <input id="m_precioActual" class="field" type="number" step="any" value="64500" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card pad">
+                            <h3 class="card-title"><span class="ico green"><svg viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m18 2 4 4" />
+                                        <path d="m17 7 3-3" />
+                                        <path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5" />
+                                        <path d="m9 11 4 4" />
+                                        <path d="m5 19-3 3" />
+                                        <path d="m14 4 6 6" />
+                                    </svg></span>Inyeccion de Cobertura</h3>
+                            <div class="grid2">
+                                <div>
+                                    <label class="field-label">Multiplicador (x)</label>
+                                    <input id="m_multiplicador_rescate" class="field" type="number" step="any"
+                                        value="2.0" />
+                                </div>
+                                <div>
+                                    <label class="field-label">Comision Mercado (%)</label>
+                                    <input id="m_comision" class="field" type="number" step="any" value="0.06" />
+                                </div>
+                            </div>
+                            <button id="calc-manual-btn" class="btn-calc"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect width="16" height="20" x="4" y="2" rx="2" />
+                                    <line x1="8" x2="16" y1="6" y2="6" />
+                                    <line x1="16" x2="16" y1="14" y2="18" />
+                                    <path d="M16 10h.01" />
+                                    <path d="M12 10h.01" />
+                                    <path d="M8 10h.01" />
+                                    <path d="M12 14h.01" />
+                                    <path d="M8 14h.01" />
+                                    <path d="M12 18h.01" />
+                                    <path d="M8 18h.01" />
+                                </svg>Calcular Rescate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna de resultados -->
+                <div class="col-right">
+
+                    <!-- Resultados modo automatico -->
+                    <div id="results-auto" class="col-right" style="gap:12px;">
+                        <div class="metrics four">
+                            <div class="metric">
+                                <span class="m-label">Perdida Total</span>
+                                <span id="resPerdidaTotal" class="m-value m-red">-$0.00</span>
+                            </div>
+                            <div class="metric">
+                                <span class="m-label">Margen Inicial</span>
+                                <span id="resMargenInicial" class="m-value m-gold">$0.00</span>
+                            </div>
+                            <div class="metric">
+                                <span class="m-label">Volumen Inicial</span>
+                                <span id="resEntradaInicial" class="m-value small m-green">0</span>
+                            </div>
+                            <div class="metric">
+                                <span class="m-label">Comisiones</span>
+                                <span id="resTotalComisiones" class="m-value m-yellow">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="card route-card">
+                            <div class="route-head">
+                                <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="6" cy="19" r="3" />
+                                        <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+                                        <circle cx="18" cy="5" r="3" />
+                                    </svg></span>
+                                <h3>Hoja de Ruta por Circuitos</h3>
+                            </div>
+                            <div class="route-scroll scroll-area">
+                                <table class="route">
+                                    <thead>
+                                        <tr>
+                                            <th>Circuito</th>
+                                            <th id="thVolumen">Volumen</th>
+                                            <th>Margen ($)</th>
+                                            <th>Flotante</th>
+                                            <th>Break-Even</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaCircuitos">
+                                        <tr>
+                                            <td colspan="5" class="placeholder">Proyecta la estrategia para ver la hoja
+                                                de
+                                                ruta.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resultados modo manual -->
+                    <div id="results-manual" class="col-right hidden" style="gap:12px;">
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="m-label">Precio Exacto de Salida</span>
+                                <span id="resM_PrecioBE" class="m-value big m-gold">$0.00</span>
+                            </div>
+                            <div class="metric">
+                                <span class="m-label">Distancia para Break-Even</span>
+                                <span id="resM_DistanciaBE" class="m-value big m-green">0.00%</span>
+                            </div>
+                        </div>
+
+                        <div class="card rows">
+                            <div class="route-head">
+                                <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                                        <path
+                                            d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                        <path d="M12 11h4" />
+                                        <path d="M12 16h4" />
+                                        <path d="M8 11h.01" />
+                                        <path d="M8 16h.01" />
+                                    </svg></span>
+                                <h3>Diagnostico y Ruta de Salida</h3>
+                            </div>
+                            <div class="row">
+                                <span class="lbl">Monedas a Ejecutar (Cobertura)</span>
+                                <span id="resM_VolCobertura" class="val m-gold">0</span>
+                            </div>
+                            <div class="row">
+                                <span class="lbl">Perdida Flotante Actual</span>
+                                <span id="resM_Flotante" class="val m-red">-$0.00</span>
+                            </div>
+                            <div class="row">
+                                <span class="lbl">Comisiones a Pagar</span>
+                                <span id="resM_Fees" class="val m-yellow">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div><!-- /tool-mata -->
+
+        <!-- ================= HERRAMIENTA B: DCA MASTER ================= -->
+        <div id="tool-dca" class="tool hidden">
+            <main class="main">
+
+                <!-- Columna de entradas -->
+                <div class="col-left scroll-area">
+
+                    <div class="card pad">
+                        <h3 class="card-title"><span class="ico"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M10 5H3" />
+                                    <path d="M12 19H3" />
+                                    <path d="M14 3v4" />
+                                    <path d="M16 17v4" />
+                                    <path d="M21 12h-9" />
+                                    <path d="M21 19h-5" />
+                                    <path d="M21 5h-7" />
+                                    <path d="M8 10v4" />
+                                    <path d="M8 12H3" />
+                                </svg></span>Modo de Calculo</h3>
+                        <select id="dcaModoCalculo" class="field" onchange="dcaCambiarModo()">
+                            <option value="1">Automatico por % de cuenta</option>
+                            <option value="2">Por riesgo exacto ($ a perder)</option>
+                            <option value="3">Entrada manual libre</option>
+                        </select>
+                    </div>
+
+                    <div class="card pad">
+                        <h3 class="card-title"><span class="ico green"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+                                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+                                </svg></span>Configuracion General</h3>
+
+                        <div id="dcaBloqueModo1">
+                            <div class="grid2">
+                                <div>
+                                    <label class="field-label">Balance Total (USDT)</label>
+                                    <input id="dcaBalance" class="field" type="text" inputmode="decimal"
+                                        placeholder="1000" oninput="dcaCalcular()" />
+                                </div>
+                                <div>
+                                    <label class="field-label">% de Capital a Usar</label>
+                                    <input id="dcaPorcentaje" class="field" type="text" inputmode="decimal"
+                                        placeholder="4" oninput="dcaCalcular()" />
+                                </div>
+                            </div>
+                            <div class="capital-display" id="dcaCapitalUsarDisplay">Equivale a: $0.00 USDT</div>
+                        </div>
+
+                        <div id="dcaBloqueModo2" class="hidden">
+                            <label class="field-label danger">Perdida Maxima Deseada ($)</label>
+                            <input id="dcaRiesgoDeseado" class="field danger" type="text" inputmode="decimal"
+                                placeholder="100" oninput="dcaCalcular()" />
+                        </div>
+
+                        <div class="grid2" style="margin-top:12px;">
+                            <div>
+                                <label class="field-label">Apalancamiento (x)</label>
+                                <input id="dcaApalancamiento" class="field" type="text" inputmode="decimal"
+                                    placeholder="20" oninput="dcaCalcular()" />
+                            </div>
+                            <div>
+                                <label class="field-label">Comision Exchange (%)</label>
+                                <input id="dcaComision" class="field" type="text" inputmode="decimal" value="0.05"
+                                    oninput="dcaCalcular()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card pad">
+                        <h3 class="card-title"><span class="ico"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <circle cx="12" cy="12" r="6" />
+                                    <circle cx="12" cy="12" r="2" />
+                                </svg></span>Gatillos y Estrategia</h3>
+                        <div class="grid2">
+                            <div>
+                                <label class="field-label">Cantidad de Gatillos</label>
+                                <select id="dcaNumGatillos" class="field" onchange="dcaConstruirGatillos()">
+                                    <option value="1">1 Entrada</option>
+                                    <option value="2">2 Entradas</option>
+                                    <option value="3" selected>3 Entradas</option>
+                                    <option value="4">4 Entradas</option>
+                                    <option value="5">5 Entradas</option>
+                                </select>
+                            </div>
+                            <div id="dcaBloqueEstrategia">
+                                <label class="field-label">Estrategia (Mult.)</label>
+                                <select id="dcaTipoEstrategia" class="field" onchange="dcaCalcular()">
+                                    <option value="martingala">Martingala 2.0x</option>
+                                    <option value="unoymedio">Multiplicador 1.5x</option>
+                                    <option value="iguales">Partes Iguales</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="dcaBloqueTipoValor" style="margin-top:12px;">
+                            <label class="field-label" id="dcaLabelTipoValor">Ver resultados en:</label>
+                            <select id="dcaTipoValorManual" class="field" onchange="dcaCalcular()">
+                                <option value="margen">Margen (USDT)</option>
+                                <option value="nominal">Volumen Nominal (USD)</option>
+                                <option value="monedas">Cantidad de Monedas</option>
+                            </select>
+                        </div>
+                        <div style="margin-top:12px;">
+                            <label class="field-label">Precio de cada gatillo</label>
+                            <div class="gatillos-grid" id="dcaContenedorPrecios"></div>
+                        </div>
+                    </div>
+
+                    <div class="card pad">
+                        <h3 class="card-title"><span class="ico yellow"><svg viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                                    <path d="M12 9v4" />
+                                    <path d="M12 17h.01" />
+                                </svg></span>Riesgo y Stop Loss</h3>
+                        <div class="grid2">
+                            <div>
+                                <label class="field-label">Direccion del Trade</label>
+                                <select id="dcaDireccion" class="field" onchange="dcaCalcular()">
+                                    <option value="long">LONG (Compra)</option>
+                                    <option value="short">SHORT (Venta)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label">Precio Stop Loss</label>
+                                <input id="dcaSl" class="field" type="text" inputmode="decimal" placeholder="0.00"
+                                    oninput="dcaCalcular()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna de resultados -->
+                <div class="col-right">
+                    <div class="route-scroll scroll-area" style="display:flex; flex-direction:column; gap:12px;">
+
+                        <div class="metric" style="align-items:stretch; text-align:center;">
+                            <span class="m-label">Precio Promedio Final</span>
+                            <span id="dcaPrecioPromedio" class="m-value big m-gold">$0.00</span>
+                        </div>
+
+                        <div class="chips" id="dcaContenedorMargenes"></div>
+
+                        <div class="card pad">
+                            <div class="totales-title">Totales Acumulados (para coberturas)</div>
+                            <div class="totales-row">
+                                <span class="lbl">Total Monedas</span>
+                                <span class="val m-gold" id="dcaGranTotalMonedas">0.0000 Q</span>
+                            </div>
+                            <div class="totales-row">
+                                <span class="lbl">Costo Total (Margen)</span>
+                                <span class="val" id="dcaGranTotalMargen">$0.00 USDT</span>
+                            </div>
+                            <div class="totales-row">
+                                <span class="lbl">Total Nocional</span>
+                                <span class="val m-yellow" id="dcaGranTotalNominal">$0.00 USD</span>
+                            </div>
+                        </div>
+
+                        <div class="danger-box" id="dcaCajaRiesgo">
+                            <span class="m-label" id="dcaTituloPerdida">Perdida Maxima Total</span>
+                            <span class="m-value" id="dcaPerdidaTotal">$0.00</span>
+                            <div class="fees" id="dcaDesgloseFees">Ingresa precio SL para calcular la perdida.</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div><!-- /tool-dca -->
+    </div>
+
+    <script>
+        // =========================================================
+        // Selector de modo
+        // =========================================================
+        const btnAuto = document.getElementById('mode-auto');
+        const btnManual = document.getElementById('mode-manual');
+        const inputsAuto = document.getElementById('inputs-auto');
+        const inputsManual = document.getElementById('inputs-manual');
+        const resultsAuto = document.getElementById('results-auto');
+        const resultsManual = document.getElementById('results-manual');
+
+        function setMode(mode) {
+            const isAuto = mode === 'auto';
+            btnAuto.classList.toggle('active', isAuto);
+            btnManual.classList.toggle('active', !isAuto);
+            inputsAuto.classList.toggle('hidden', !isAuto);
+            inputsManual.classList.toggle('hidden', isAuto);
+            resultsAuto.classList.toggle('hidden', !isAuto);
+            resultsManual.classList.toggle('hidden', isAuto);
+        }
+
+        btnAuto.addEventListener('click', () => setMode('auto'));
+        btnManual.addEventListener('click', () => setMode('manual'));
+
+        // =========================================================
+        // MODO AUTOMATICO (logica original intacta)
+        // =========================================================
+        function calcularAuto() {
+            const riesgoMaxUSD = parseFloat(document.getElementById('riesgoMax').value);
+            const precioEntrada = parseFloat(document.getElementById('precioEntrada').value);
+            const apalancamiento = parseFloat(document.getElementById('apalancamiento').value);
+            const comisionBasePct = parseFloat(document.getElementById('comision').value) / 100;
+            const distanciaPct = parseFloat(document.getElementById('distancia').value) / 100;
+            const circuitos = parseInt(document.getElementById('circuitos').value);
+            const multiplicador = parseFloat(document.getElementById('multiplicador').value);
+            const tipoVolumen = document.getElementById('tipoVolumen').value;
+            const dividirBase = parseInt(document.getElementById('dividirBase').value); // 1, 2 o 3
+
+            let sumA_risk = 1; let sumB_risk = 0; let lote_risk = 1; let expTotal_risk = 1;
+            for (let i = 1; i <= circuitos; i++) {
+                lote_risk *= multiplicador;
+                expTotal_risk += lote_risk;
+                if (i % 2 !== 0) { sumB_risk += lote_risk; } else { sumA_risk += lote_risk; }
+            }
+
+            let perdidaMovimiento = (circuitos % 2 !== 0) ? sumB_risk * distanciaPct : sumA_risk * distanciaPct;
+            const factorRiesgoTotal = perdidaMovimiento + (expTotal_risk * comisionBasePct * 2);
+            const monedasIniciales = riesgoMaxUSD / (precioEntrada * factorRiesgoTotal);
+            const nocionalInicial = monedasIniciales * precioEntrada;
+            const margenInicial = nocionalInicial / apalancamiento;
+            const totalComisionesUSD = (monedasIniciales * expTotal_risk) * comisionBasePct * 2 * precioEntrada;
+
+            document.getElementById('resMargenInicial').innerText = "$" + margenInicial.toFixed(2);
+            document.getElementById('resTotalComisiones').innerText = "$" + totalComisionesUSD.toFixed(2);
+
+            let textoEntrada = tipoVolumen === 'nocional' ? nocionalInicial.toFixed(2) + " USDT" : monedasIniciales.toFixed(5) + " Monedas";
+            document.getElementById('resEntradaInicial').innerText = textoEntrada;
+            document.getElementById('resPerdidaTotal').innerText = "-$" + riesgoMaxUSD.toFixed(2);
+            document.getElementById('thVolumen').innerText = tipoVolumen === 'nocional' ? "Nocional" : "Monedas";
+
+            const tbody = document.getElementById('tablaCircuitos');
+            tbody.innerHTML = '';
+
+            // ==========================================
+            // RENDERIZAR LA BASE (CON DCA SI SE ELIGIO)
+            // ==========================================
+            let porcentajesBase = dividirBase === 2 ? [50, 50] : (dividirBase === 3 ? [33, 33, 34] : [100]);
+            let letras = ['A', 'B', 'C'];
+
+            let expParcial = 0;
+            let perdidaBaseAcumulada = 0;
+            let feesBaseAcumulados = 0;
+
+            for (let j = 1; j <= dividirBase; j++) {
+                let volPartido = monedasIniciales * (porcentajesBase[j - 1] / 100);
+
+                if (j > 1) {
+                    // El volumen que ya entro se va en contra por otra 'distanciaPct'
+                    perdidaBaseAcumulada += expParcial * precioEntrada * distanciaPct;
+                }
+
+                expParcial += volPartido;
+                let margenPartido = (volPartido * precioEntrada) / apalancamiento;
+                feesBaseAcumulados += volPartido * comisionBasePct * 2 * precioEntrada;
+
+                let be = ((perdidaBaseAcumulada + feesBaseAcumulados) / (expParcial * precioEntrada)) * 100;
+
+                let displayVol = tipoVolumen === 'nocional' ? (volPartido * precioEntrada).toFixed(2) : volPartido.toFixed(5);
+                let nombre = dividirBase > 1 ? `Base-${letras[j - 1]} (${porcentajesBase[j - 1]}%)` : `Base`;
+
+                let colBase = dividirBase > 1 ? 'color: var(--yellow);' : '';
+                tbody.innerHTML += `<tr><td style="${colBase}">${nombre}</td><td style="${colBase}">${displayVol}</td><td style="${colBase}">$${margenPartido.toFixed(2)}</td><td class="cell-danger">-$${perdidaBaseAcumulada.toFixed(2)}</td><td class="cell-be">${be.toFixed(3)}%</td></tr>`;
+            }
+
+            // ==========================================
+            // RENDERIZAR CIRCUITOS DE COBERTURA
+            // ==========================================
+            let cantidadMonedasFila = monedasIniciales; // El multiplicador se hace sobre el TOTAL de la base
+            let sumA = monedasIniciales;
+            let sumB = 0;
+            let exposicionAcumulada = monedasIniciales;
+
+            // Perdida exacta de la base entera en el momento que se activa C1
+            let perdidaBase_en_C1 = perdidaBaseAcumulada + (monedasIniciales * precioEntrada * distanciaPct);
+
+            for (let i = 1; i <= circuitos; i++) {
+                cantidadMonedasFila = cantidadMonedasFila * multiplicador;
+                exposicionAcumulada += cantidadMonedasFila;
+                let margenFila = (cantidadMonedasFila * precioEntrada) / apalancamiento;
+
+                let monedasEnContra, poderNetoMonedas, beCircuito;
+                let feesAcumuladosUSD = exposicionAcumulada * comisionBasePct * 2 * precioEntrada;
+
+                if (i % 2 !== 0) {
+                    sumB += cantidadMonedasFila;
+                    monedasEnContra = sumA;
+                    poderNetoMonedas = sumB - sumA;
+                } else {
+                    sumA += cantidadMonedasFila;
+                    monedasEnContra = sumB;
+                    poderNetoMonedas = sumA - sumB;
+                }
+
+                let perdidaFlotanteUSD;
+                if (i === 1) {
+                    // En el Circuito 1, traemos el calculo exacto de la base (con o sin DCA)
+                    perdidaFlotanteUSD = perdidaBase_en_C1;
+                } else {
+                    // A partir del Circuito 2 todo es estandar, el bloque opuesto se mueve 1 distancia extra
+                    perdidaFlotanteUSD = monedasEnContra * precioEntrada * distanciaPct;
+                }
+
+                beCircuito = ((perdidaFlotanteUSD + feesAcumuladosUSD) / (poderNetoMonedas * precioEntrada)) * 100;
+
+                let displayVolumen = tipoVolumen === 'nocional' ? (cantidadMonedasFila * precioEntrada).toFixed(2) : cantidadMonedasFila.toFixed(4);
+                tbody.innerHTML += `<tr><td>C ${i}</td><td>${displayVolumen}</td><td>$${margenFila.toFixed(2)}</td><td class="cell-danger">-$${perdidaFlotanteUSD.toFixed(2)}</td><td class="cell-be">${beCircuito.toFixed(3)}%</td></tr>`;
+            }
+        }
+
+        // =========================================================
+        // MODO MANUAL (logica original intacta)
+        // =========================================================
+        function calcularManual() {
+            var qAtrapado = parseFloat(document.getElementById('m_volAtrapado').value);
+            var pEntrada = parseFloat(document.getElementById('m_precioEntrada').value);
+            var pActual = parseFloat(document.getElementById('m_precioActual').value);
+            var multiplicadorRescate = parseFloat(document.getElementById('m_multiplicador_rescate').value);
+            var comisionPct = parseFloat(document.getElementById('m_comision').value) / 100;
+
+            if (multiplicadorRescate <= 1) {
+                alert("El multiplicador debe ser mayor a 1.0.");
+                return;
+            }
+
+            var qCobertura = qAtrapado * multiplicadorRescate;
+            var perdidaFlotanteUSD = Math.abs(pEntrada - pActual) * qAtrapado;
+            var feeEntradaVieja = qAtrapado * pEntrada * comisionPct;
+            var feeEntradaNueva = qCobertura * pActual * comisionPct;
+            var feeSalidaAmbas = (qAtrapado + qCobertura) * pActual * comisionPct;
+            var totalFeesUSD = feeEntradaVieja + feeEntradaNueva + feeSalidaAmbas;
+
+            var poderNetoMonedas = qCobertura - qAtrapado;
+            var deudaTotal = perdidaFlotanteUSD + totalFeesUSD;
+            var distanciaBE_USD = deudaTotal / poderNetoMonedas;
+            var distanciaBE_Pct = (distanciaBE_USD / pActual) * 100;
+
+            var precioBreakEven;
+            if (pActual < pEntrada) { precioBreakEven = pActual - distanciaBE_USD; }
+            else { precioBreakEven = pActual + distanciaBE_USD; }
+
+            document.getElementById('resM_VolCobertura').innerText = qCobertura.toFixed(5) + " Monedas";
+            document.getElementById('resM_Flotante').innerText = "-$" + perdidaFlotanteUSD.toFixed(2);
+            document.getElementById('resM_Fees').innerText = "$" + totalFeesUSD.toFixed(2);
+            document.getElementById('resM_DistanciaBE').innerText = distanciaBE_Pct.toFixed(3) + "%";
+            document.getElementById('resM_PrecioBE').innerText = "$" + precioBreakEven.toFixed(2);
+        }
+
+        // =========================================================
+        // Enlaces e inicializacion
+        // =========================================================
+        document.getElementById('calc-auto-btn').addEventListener('click', calcularAuto);
+        document.getElementById('calc-manual-btn').addEventListener('click', calcularManual);
+
+        setMode('auto');
+        calcularAuto(); // Proyeccion inicial con los valores por defecto
+
+        // =========================================================
+        // Conmutador de herramientas (Mata Memes / DCA Master)
+        // =========================================================
+        const toolMataBtn = document.getElementById('tool-mata-btn');
+        const toolDcaBtn = document.getElementById('tool-dca-btn');
+        const toolMata = document.getElementById('tool-mata');
+        const toolDca = document.getElementById('tool-dca');
+        const activeTool = document.getElementById('activeTool');
+
+        let dcaInicializado = false;
+
+        function setTool(tool) {
+            const isMata = tool === 'mata';
+            toolMataBtn.classList.toggle('active', isMata);
+            toolDcaBtn.classList.toggle('active', !isMata);
+            toolMata.classList.toggle('hidden', !isMata);
+            toolDca.classList.toggle('hidden', isMata);
+            activeTool.textContent = isMata ? 'La Mata Memes' : 'DCA Master';
+            if (!isMata && !dcaInicializado) {
+                dcaInicializado = true;
+                dcaCambiarModo();
+            }
+        }
+
+        toolMataBtn.addEventListener('click', () => setTool('mata'));
+        toolDcaBtn.addEventListener('click', () => setTool('dca'));
+
+        // =========================================================
+        // HERRAMIENTA B: DCA MASTER (logica portada con IDs dca*)
+        // =========================================================
+        function dcaLimpiarNumero(texto) {
+            if (!texto) return 0;
+            let numero = parseFloat(texto.replace(',', '.'));
+            return isNaN(numero) ? 0 : numero;
+        }
+
+        function dcaCambiarModo() {
+            let modo = document.getElementById('dcaModoCalculo').value;
+            let bloque1 = document.getElementById('dcaBloqueModo1');
+            let bloque2 = document.getElementById('dcaBloqueModo2');
+            let bloqueEst = document.getElementById('dcaBloqueEstrategia');
+            let labelTip = document.getElementById('dcaLabelTipoValor');
+
+            if (modo === "1") {
+                bloque1.classList.remove('hidden');
+                bloque2.classList.add('hidden');
+                bloqueEst.classList.remove('hidden');
+                labelTip.innerText = "Ver resultados en:";
+            } else if (modo === "2") {
+                bloque1.classList.add('hidden');
+                bloque2.classList.remove('hidden');
+                bloqueEst.classList.remove('hidden');
+                labelTip.innerText = "Ver resultados en:";
+            } else if (modo === "3") {
+                bloque1.classList.add('hidden');
+                bloque2.classList.add('hidden');
+                bloqueEst.classList.add('hidden');
+                labelTip.innerText = "Ingresar tamaño en:";
+            }
+            dcaConstruirGatillos();
+        }
+
+        function dcaConstruirGatillos() {
+            let num = parseInt(document.getElementById('dcaNumGatillos').value);
+            let modo = document.getElementById('dcaModoCalculo').value;
+            let contenedor = document.getElementById('dcaContenedorPrecios');
+
+            contenedor.innerHTML = '';
+
+            for (let i = 1; i <= num; i++) {
+                if (modo === "3") {
+                    contenedor.innerHTML += `
+                        <div class="gatillo-box">
+                            <label>Precio G${i}</label>
+                            <input type="text" inputmode="decimal" id="dcaP${i}" placeholder="Precio" oninput="dcaCalcular()">
+                            <input type="text" inputmode="decimal" id="dcaT${i}" placeholder="Tamaño" oninput="dcaCalcular()">
+                        </div>
+                    `;
+                } else {
+                    contenedor.innerHTML += `
+                        <div class="gatillo-box">
+                            <label>Precio G${i}</label>
+                            <input type="text" inputmode="decimal" id="dcaP${i}" placeholder="0.00" oninput="dcaCalcular()">
+                        </div>
+                    `;
+                }
+            }
+            dcaCalcular();
+        }
+
+        function dcaObtenerProporciones(num, tipo) {
+            let props = [];
+            if (tipo === 'martingala') {
+                for (let i = 0; i < num; i++) props.push(Math.pow(2, i));
+            } else if (tipo === 'unoymedio') {
+                for (let i = 0; i < num; i++) props.push(Math.pow(1.5, i));
+            } else if (tipo === 'iguales') {
+                for (let i = 0; i < num; i++) props.push(1);
+            }
+            return props;
+        }
+
+        function dcaFormatearSalida(i, margen, nominal, monedas, tipoValor, precio) {
+            if (tipoValor === 'margen') {
+                return `G${i} Margen: <br><span>$${margen.toFixed(2)}</span>`;
+            } else if (tipoValor === 'nominal') {
+                return `G${i} Nominal: <br><span>$${nominal.toFixed(2)}</span>`;
+            } else if (tipoValor === 'monedas') {
+                if (precio > 0) {
+                    let dec = monedas < 1 ? 4 : 2;
+                    return `G${i} Monedas: <br><span>${monedas.toFixed(dec)}</span>`;
+                } else {
+                    return `G${i} Monedas: <br><span>(Falta precio)</span>`;
+                }
+            }
+        }
+
+        function dcaCalcular() {
+            let modo = document.getElementById('dcaModoCalculo').value;
+            let apalancamiento = dcaLimpiarNumero(document.getElementById('dcaApalancamiento').value);
+            let comisionOrden = dcaLimpiarNumero(document.getElementById('dcaComision').value);
+            let numGatillos = parseInt(document.getElementById('dcaNumGatillos').value);
+            let sl = dcaLimpiarNumero(document.getElementById('dcaSl').value);
+            let direccion = document.getElementById('dcaDireccion').value;
+            let tipoValor = document.getElementById('dcaTipoValorManual').value;
+
+            let displayPromedio = document.getElementById('dcaPrecioPromedio');
+            let contenedorMargenes = document.getElementById('dcaContenedorMargenes');
+            let displayPerdida = document.getElementById('dcaPerdidaTotal');
+            let displayFees = document.getElementById('dcaDesgloseFees');
+
+            // Variables para los totales
+            let totalMonedas = 0;
+            let totalNominal = 0;
+            let totalMargenAcumulado = 0;
+            let gatillosValidos = 0;
+
+            contenedorMargenes.innerHTML = '';
+
+            if (apalancamiento <= 0) {
+                dcaActualizarTotalesUI(0, 0, 0);
+                return;
+            }
+
+            if (modo === "1") {
+                let balance = dcaLimpiarNumero(document.getElementById('dcaBalance').value);
+                let porcentaje = dcaLimpiarNumero(document.getElementById('dcaPorcentaje').value);
+                let tipoEstrategia = document.getElementById('dcaTipoEstrategia').value;
+                let proporciones = dcaObtenerProporciones(numGatillos, tipoEstrategia);
+
+                if (balance > 0 && porcentaje > 0) {
+                    let capitalUsar = balance * (porcentaje / 100);
+                    document.getElementById('dcaCapitalUsarDisplay').innerText = "Equivale a: $" + capitalUsar.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " USDT";
+
+                    let partesTotales = proporciones.reduce((a, b) => a + b, 0);
+                    let valorParte = capitalUsar / partesTotales;
+
+                    for (let i = 0; i < numGatillos; i++) {
+                        let precio = dcaLimpiarNumero(document.getElementById(`dcaP${i + 1}`).value);
+                        let margen = valorParte * proporciones[i];
+                        let nominal = margen * apalancamiento;
+                        let monedas = precio > 0 ? (nominal / precio) : 0;
+
+                        contenedorMargenes.innerHTML += `<div class="margen-item">${dcaFormatearSalida(i + 1, margen, nominal, monedas, tipoValor, precio)}</div>`;
+
+                        if (precio > 0) {
+                            totalNominal += nominal;
+                            totalMonedas += monedas;
+                            totalMargenAcumulado += margen;
+                            gatillosValidos++;
+                        }
+                    }
+                }
+            }
+
+            else if (modo === "2") {
+                let riesgoDeseado = dcaLimpiarNumero(document.getElementById('dcaRiesgoDeseado').value);
+                let tipoEstrategia = document.getElementById('dcaTipoEstrategia').value;
+                let proporciones = dcaObtenerProporciones(numGatillos, tipoEstrategia);
+
+                let todosPreciosLlenos = true;
+                let precios = [];
+                for (let i = 0; i < numGatillos; i++) {
+                    let p = dcaLimpiarNumero(document.getElementById(`dcaP${i + 1}`).value);
+                    if (p <= 0) todosPreciosLlenos = false;
+                    precios.push(p);
+                }
+
+                if (riesgoDeseado > 0 && sl > 0 && todosPreciosLlenos) {
+                    let partesTotales = proporciones.reduce((a, b) => a + b, 0);
+                    let Kc = 0;
+                    for (let i = 0; i < numGatillos; i++) {
+                        Kc += (proporciones[i] / partesTotales) / precios[i];
+                    }
+
+                    let P_avg = 1 / Kc;
+                    let diff = (direccion === 'long') ? (P_avg - sl) : (sl - P_avg);
+                    if (diff < 0) diff = 0;
+
+                    let feeRate = (comisionOrden * 2) / 100;
+                    let V_total = riesgoDeseado / (diff * Kc + feeRate);
+                    let margenTotal = V_total / apalancamiento;
+
+                    for (let i = 0; i < numGatillos; i++) {
+                        let margen = margenTotal * (proporciones[i] / partesTotales);
+                        let nominal = margen * apalancamiento;
+                        let monedas = nominal / precios[i];
+
+                        contenedorMargenes.innerHTML += `<div class="margen-item">${dcaFormatearSalida(i + 1, margen, nominal, monedas, tipoValor, precios[i])}</div>`;
+
+                        totalNominal += nominal;
+                        totalMonedas += monedas;
+                        totalMargenAcumulado += margen;
+                        gatillosValidos++;
+                    }
+                }
+            }
+
+            else if (modo === "3") {
+                for (let i = 0; i < numGatillos; i++) {
+                    let precio = dcaLimpiarNumero(document.getElementById(`dcaP${i + 1}`).value);
+                    let tamano = dcaLimpiarNumero(document.getElementById(`dcaT${i + 1}`).value);
+
+                    if (precio > 0 && tamano > 0) {
+                        let margenObj = 0, nominalObj = 0, monedasObj = 0;
+
+                        if (tipoValor === 'margen') {
+                            margenObj = tamano;
+                            nominalObj = tamano * apalancamiento;
+                            monedasObj = nominalObj / precio;
+                        } else if (tipoValor === 'nominal') {
+                            nominalObj = tamano;
+                            margenObj = tamano / apalancamiento;
+                            monedasObj = nominalObj / precio;
+                        } else if (tipoValor === 'monedas') {
+                            monedasObj = tamano;
+                            nominalObj = tamano * precio;
+                            margenObj = nominalObj / apalancamiento;
+                        }
+
+                        contenedorMargenes.innerHTML += `<div class="margen-item">${dcaFormatearSalida(i + 1, margenObj, nominalObj, monedasObj, tipoValor, precio)}</div>`;
+
+                        totalNominal += nominalObj;
+                        totalMonedas += monedasObj;
+                        totalMargenAcumulado += margenObj;
+                        gatillosValidos++;
+                    }
+                }
+            }
+
+            // --- ACTUALIZAR PANTALLA DE TOTALES ---
+            dcaActualizarTotalesUI(totalMonedas, totalMargenAcumulado, totalNominal);
+
+            if (gatillosValidos > 0 && totalMonedas > 0) {
+                let precioPromedioFinal = totalNominal / totalMonedas;
+                let maxDecimals = precioPromedioFinal < 1 ? 8 : 4;
+                displayPromedio.innerText = "$" + precioPromedioFinal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimals });
+
+                let comisionTotalCost = totalNominal * ((comisionOrden * 2) / 100);
+
+                if (sl > 0) {
+                    let perdidaMercado = 0;
+                    if (direccion === 'long') {
+                        perdidaMercado = (precioPromedioFinal - sl) * totalMonedas;
+                    } else {
+                        perdidaMercado = (sl - precioPromedioFinal) * totalMonedas;
+                    }
+                    if (perdidaMercado < 0) perdidaMercado = 0;
+
+                    let perdidaTotalReal = perdidaMercado + comisionTotalCost;
+
+                    displayPerdida.innerText = "-$" + perdidaTotalReal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    displayFees.innerText = `El exchange descontará aprox $${comisionTotalCost.toFixed(2)} USD en comisiones.`;
+                } else {
+                    displayPerdida.innerText = "$0.00";
+                    displayFees.innerText = "Ingresa precio SL para calcular la perdida.";
+                }
+            } else {
+                displayPromedio.innerText = "$0.00";
+                displayPerdida.innerText = "$0.00";
+                displayFees.innerText = "";
+            }
+        }
+
+        function dcaActualizarTotalesUI(monedas, margen, nominal) {
+            let decMonedas = monedas < 1 ? 4 : 2;
+            document.getElementById('dcaGranTotalMonedas').innerText = monedas.toFixed(decMonedas) + " Q";
+            document.getElementById('dcaGranTotalMargen').innerText = "$" + margen.toFixed(2) + " USDT";
+            document.getElementById('dcaGranTotalNominal').innerText = "$" + nominal.toFixed(2) + " USD";
+        }
+    </script>
+</body>
+
+</html>
